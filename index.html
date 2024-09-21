@@ -93,8 +93,14 @@
                 }
                 const data = await response.json();
 
-                if (data.success) {
-                    document.getElementById('result').innerHTML = `<a href="${data.download_link}" download>دانلود ویدیو</a>`;
+                console.log(data);  // برای مشاهده جزئیات
+
+                // بررسی وجود ویدیو در پاسخ API
+                const media = data.result.media;
+                const video = media.find(item => item.type === 'video');
+                
+                if (video) {
+                    document.getElementById('result').innerHTML = `<a href="${video.url}" download>دانلود ویدیو</a>`;
                 } else {
                     document.getElementById('result').innerHTML = 'ویدیو یافت نشد یا امکان دانلود وجود ندارد.';
                 }
