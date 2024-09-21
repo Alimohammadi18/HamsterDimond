@@ -29,8 +29,8 @@
 
             console.log(data); // مشاهده کامل داده‌های API
 
-            if (data.status === 200 && data.result) {
-                const media = data.result.media || []; // از "media" محافظت می‌کنیم
+            if (data.status === 200 && data.result && data.result.media) {
+                const media = data.result.media;
                 let output = '';
                 media.forEach(item => {
                     if (item.type === 'video') {
@@ -40,6 +40,10 @@
                     }
                 });
                 document.getElementById('result').innerHTML = output || 'محتوایی برای نمایش یافت نشد.';
+            } else if (!data.result) {
+                document.getElementById('result').innerHTML = 'نتیجه‌ای یافت نشد. لطفاً لینک دیگری را امتحان کنید.';
+            } else if (!data.result.media) {
+                document.getElementById('result').innerHTML = 'محتوای چندرسانه‌ای در این لینک یافت نشد.';
             } else {
                 document.getElementById('result').innerHTML = 'ویدیو یافت نشد یا امکان دانلود وجود ندارد.';
             }
