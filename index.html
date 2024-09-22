@@ -58,13 +58,13 @@
         <button id="startBtn">Generate Keys</button>
         
         <div id="progressContainer" class="hidden">
-            <div class="progress-bar">
-                <div id="progressBar"></div>
+            <div class="progress-bar" style="width: 100%; background-color: #e0e0e0;">
+                <div id="progressBar" style="height: 20px; width: 0%; background-color: green;"></div>
             </div>
             <div id="progressText">0%</div>
             <div id="progressLog">Starting...</div>
             <div id="countdownContainer">
-            <p>Next Step will start in: <span id="countdownTimer"></span> seconds </p>
+                <p>Next Step will start in: <span id="countdownTimer"></span> seconds</p>
             </div>
         </div>
         <div id="keyContainer" class="hidden">
@@ -81,7 +81,7 @@
 
         <div class="mycodes">
             <p>
-                The Key Generation may take upto 10 mins.
+                The Key Generation may take up to 10 mins.
             </p>
             <button id="ShowKeysBtn">My Codes</button>
             <div id="generatedCodesContainer" style="display:none;">
@@ -94,6 +94,73 @@
             <p>Disclaimer: This tool is for educational purposes only. Use responsibly.</p>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const startBtn = document.getElementById('startBtn');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            const progressLog = document.getElementById('progressLog');
+            const progressContainer = document.getElementById('progressContainer');
+            const countdownTimer = document.getElementById('countdownTimer');
+            const keyContainer = document.getElementById('keyContainer');
+            const generatedKeysTitle = document.getElementById('generatedKeysTitle');
+            const keysList = document.getElementById('keysList');
+
+            let progress = 0;
+            let interval;
+
+            function updateProgress() {
+                progress += 10;
+                progressBar.style.width = progress + '%';
+                progressText.textContent = progress + '%';
+                progressLog.textContent = 'Generating... (' + progress + '%)';
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    progressLog.textContent = 'Generation completed!';
+                    showGeneratedKeys();
+                }
+            }
+
+            function showGeneratedKeys() {
+                progressContainer.classList.add('hidden');
+                keyContainer.classList.remove('hidden');
+                generatedKeysTitle.classList.remove('hidden');
+                
+                // Generating dummy keys
+                let keys = ['ABC123', 'XYZ789', 'KLM456'];  // Sample generated keys, replace with actual key generation logic
+                keysList.innerHTML = '';
+                keys.forEach(function(key) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = key;
+                    keysList.appendChild(listItem);
+                });
+            }
+
+            function startCountdown(seconds) {
+                let timeRemaining = seconds;
+                countdownTimer.textContent = timeRemaining;
+                const countdownInterval = setInterval(function() {
+                    timeRemaining--;
+                    countdownTimer.textContent = timeRemaining;
+                    if (timeRemaining <= 0) {
+                        clearInterval(countdownInterval);
+                    }
+                }, 1000);
+            }
+
+            startBtn.addEventListener('click', function() {
+                progressContainer.classList.remove('hidden');
+                keyContainer.classList.add('hidden');
+                progress = 0;
+                progressBar.style.width = '0%';
+                progressText.textContent = '0%';
+                progressLog.textContent = 'Starting...';
+                
+                interval = setInterval(updateProgress, 1000);  // Update progress every 1 second
+                startCountdown(10);  // Countdown for 10 seconds
+            });
+        });
+    </script>
 </body>
 </html>
